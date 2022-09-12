@@ -1,9 +1,5 @@
 version: 2.1
 
-orbs:
-  aws-cli: circleci/aws-cli@2.0
-  
-
 commands:
   install_awscli:
     description: Install aws cli
@@ -71,13 +67,6 @@ commands:
             fi
             
 jobs:
-  aws-cli-cred-setup:
-    executor: aws-cli/default
-    steps:
-      - aws-cli/setup:
-          aws-access-key-id: AWS_ACCESS_KEY
-          aws-secret-access-key: AWS_ACCESS_SECRET
-          aws-region: AWS_REGION_NAME
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -490,8 +479,6 @@ jobs:
 workflows:
   default:
     jobs:
-      - aws-cli-cred-setup:
-          context: aws
       - build-frontend
       - build-backend
       - test-frontend:
