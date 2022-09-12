@@ -162,9 +162,15 @@ jobs:
             npm audit --audit-level=critical
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: "python:3.7-alpine3.11"
     steps:
       - checkout
+      - install_awscli
+      - run:
+          name: Install dependencies
+          command: \
+            apk add --update tar
+            apk add --update gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
