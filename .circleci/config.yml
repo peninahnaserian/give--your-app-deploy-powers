@@ -162,15 +162,9 @@ jobs:
             npm audit --audit-level=critical
   deploy-infrastructure:
     docker:
-      - image: "python:3.7-alpine3.11"
+      - image: amazon/aws-cli
     steps:
       - checkout
-      - install_awscli
-      - run:
-          name: Install dependencies
-          command: \
-            apk add --update tar
-            apk add --update gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -197,6 +191,7 @@ jobs:
              --output text)
             echo $BACKEND_IP >> ~/project/.circleci/ansible/inventory.txt
             cat ~/project/.circleci/ansible/inventory.txt
+      - run: yum -y install tar gzip
       - persist_to_workspace:
           root: ~/
           paths:
@@ -485,6 +480,7 @@ jobs:
 workflows:
   default:
     jobs:
+
       - build-frontend
       - build-backend
       - test-frontend:
